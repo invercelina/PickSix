@@ -53,13 +53,13 @@ class PicksActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PickSixTheme {
-                MainScreen()
+                PicksScreen()
             }
         }
     }
 
     @Composable
-    fun MainScreen() {
+    fun PicksScreen() {
 
         LazyColumn(
             modifier = Modifier
@@ -320,9 +320,9 @@ class PicksActivity : ComponentActivity() {
 
     @Composable
     @Preview(showBackground = true)
-    fun MainPreview() {
+    fun PicksPreview() {
         PickSixTheme {
-            MainScreen()
+            PicksScreen()
         }
     }
 }

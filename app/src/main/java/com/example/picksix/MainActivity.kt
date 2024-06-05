@@ -74,7 +74,10 @@ class MainActivity : ComponentActivity() {
             }
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val intent = Intent(context, SignUpActivity::class.java)
+                    context.startActivity(intent)
+                },
                 modifier = Modifier
                     .padding(horizontal = 30.dp)
                     .fillMaxWidth(),

@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -14,6 +17,26 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        val keystoreFile = project.rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+
+        val supabaseKey = properties.getProperty("supabaseKey") ?: ""
+
+        buildConfigField(
+            type = "String",
+            name = "supabaseKey",
+            value = supabaseKey
+        )
+
+        val supabaseUrl = properties.getProperty("supabaseUrl") ?: ""
+
+        buildConfigField(
+            type = "String",
+            name = "supabaseUrl",
+            value = supabaseUrl
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -39,6 +62,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
