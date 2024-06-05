@@ -7,6 +7,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -75,10 +77,10 @@ class MainActivity : ComponentActivity() {
                 }
                 Column(
                     modifier = Modifier
-                        .height(80.dp)
+                        .height(130.dp)
                         .fillMaxWidth()
                         .background(Color.Blue),
-                    verticalArrangement = Arrangement.Bottom
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Row(
                         modifier = Modifier
@@ -89,11 +91,14 @@ class MainActivity : ComponentActivity() {
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
-                            modifier = Modifier.border(1.dp, Color.Red, CircleShape)
+                            modifier = Modifier.size(60.dp)
+                                .border(1.dp, Color.Red, CircleShape)
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_launcher_background),
-                                contentDescription = null
+                                painter = painterResource(id = R.drawable.baseline_person_24),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.size(40.dp)
                             )
                         }
                     }
@@ -121,6 +126,16 @@ class MainActivity : ComponentActivity() {
                         Text(text = "Leaderboard", color = Color.White)
                     }
                 }
+                Spacer(modifier = Modifier.height(15.dp))
+                Column(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "Makes Your Picks Now", fontWeight = FontWeight.Black)
+                    Text("Make at least one pick to get started!\nWinning Picks are worth 10 points.")
+                }
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -128,33 +143,37 @@ class MainActivity : ComponentActivity() {
                 ) {
                     item {
                         weekList.forEach { week ->
-                            WeekMain(week = week, onClick = {
-                                clickWeek = it
-                            })
+                            WeekMain(week = week,
+                                isSelected = (clickWeek == week.week),
+                                onClick = {
+                                    clickWeek = it
+                                })
                         }
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-                gamesWeekList[clickWeek-1].forEach { gamesWeek ->
+                gamesWeekList[clickWeek - 1].forEach { gamesWeek ->
                     GameCard(gamesWeek)
                 }
             }
         }
     }
+
     // 주 고르는 버튼
     @Composable
-    fun WeekMain(week: Week, onClick: (Int) -> Unit) {
+    fun WeekMain(week: Week, isSelected: Boolean, onClick: (Int) -> Unit) {
         Button(
-
             onClick = { onClick(week.week) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            colors = ButtonDefaults.buttonColors(containerColor = if (isSelected) Color(0xFF6DF6EA) else Color.White),
             modifier = Modifier
                 .width(160.dp)
                 .padding(start = 10.dp, top = 10.dp, bottom = 10.dp)
-
-                .border(1.dp, Color.LightGray, RoundedCornerShape(5.dp)),
+                .border(
+                    2.dp,
+                    if (isSelected) Color.Blue else Color.LightGray,
+                    RoundedCornerShape(5.dp)
+                ),
             shape = RoundedCornerShape(5.dp)
-
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -165,6 +184,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     // 게임 카드
     @Composable
     fun GameCard(game: Game) {
@@ -174,8 +194,10 @@ class MainActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .height(230.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color.LightGray)
+                border = BorderStroke(1.dp, Color.LightGray),
+                elevation = CardDefaults.elevatedCardElevation(8.dp)
             ) {
+                var isClicked by remember { mutableStateOf(2) }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -197,11 +219,14 @@ class MainActivity : ComponentActivity() {
                                 shape = RoundedCornerShape(15.dp),
                                 modifier = Modifier.padding(horizontal = 10.dp),
                                 shadowElevation = 8.dp,
-                                color = Color.White
-
+                                color = Color.White,
+                                border = if (isClicked == 0) {
+                                    BorderStroke(2.dp, Color.Blue)
+                                } else null
                             ) {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.clickable { isClicked = 0 }
                                 ) {
                                     Column(
                                         modifier = Modifier
@@ -225,7 +250,7 @@ class MainActivity : ComponentActivity() {
                                         Text(
                                             text = game.homeTeam.name,
                                             fontSize = 10.sp,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.Black
                                         )
                                         Text(text = "65% Picked", fontSize = 10.sp)
                                     }
@@ -237,13 +262,16 @@ class MainActivity : ComponentActivity() {
                                 shape = RoundedCornerShape(15.dp),
                                 modifier = Modifier.padding(horizontal = 10.dp),
                                 shadowElevation = 8.dp,
-                                color = Color.White
+                                color = Color.White,
+                                border = if (isClicked == 1) {
+                                    BorderStroke(2.dp, Color.Blue)
+                                } else null
                             ) {
 
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
-
-                                    ) {
+                                    modifier = Modifier.clickable { isClicked = 1 }
+                                ) {
                                     Column(
                                         modifier = Modifier
                                             .weight(1f)
@@ -266,7 +294,7 @@ class MainActivity : ComponentActivity() {
                                         Text(
                                             text = game.awayTeam.name,
                                             fontSize = 10.sp,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.Black
                                         )
                                         Text(text = "35% Picked", fontSize = 10.sp)
                                     }
@@ -291,7 +319,7 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 
