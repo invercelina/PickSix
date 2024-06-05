@@ -1,13 +1,13 @@
 package com.example.picksix
 
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +32,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.picksix.ui.theme.PickSixTheme
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.postgrest.Postgrest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+
+val supabase = createSupabaseClient(
+    supabaseUrl = BuildConfig.supabaseUrl,
+    supabaseKey = BuildConfig.supabaseKey
+) {
+    install(Postgrest)
+    install(Auth)
+}
+
+suspend fun signUpNewUser(userMail:String, userPassword:String) {
+    supabase.auth.signUpWith(Email) {
+        email = userMail
+        password = userPassword
+    }
+}
+
 
 class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,26 +93,20 @@ class SignUpActivity : ComponentActivity() {
                     .background(Color.LightGray),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                var userName by remember { mutableStateOf("") }
+                var email by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
                 var nickname by remember { mutableStateOf("") }
-                val maxChar = 8
+                val maxChar = 20
                 Spacer(modifier = Modifier.height(30.dp))
                 TextField(
-                    value = userName,
-                    onValueChange = { if (it.length <= maxChar) userName = it },
+                    value = email,
+                    onValueChange = { email = it },
                     label = {
-                        Text(text = "username")
+                        Text(text = "email")
                     },
                 )
-                Text(
-                    text = "아이디는 8글자까지 가능합니다",
-                    modifier = Modifier
-                        .padding(horizontal = 35.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.End
-                )
-                Spacer(modifier = Modifier.height(30.dp))
+
+                Spacer(modifier = Modifier.height(40.dp))
                 TextField(
                     value = password, onValueChange = { if (it.length <= maxChar) password = it },
                     label = {
@@ -98,7 +115,7 @@ class SignUpActivity : ComponentActivity() {
                     visualTransformation = PasswordVisualTransformation(),
                 )
                 Text(
-                    text = "비밀번호는 8글자까지 가능합니다",
+                    text = "비밀번호는 ${maxChar}글자까지 가능합니다",
                     modifier = Modifier
                         .padding(horizontal = 35.dp)
                         .fillMaxWidth(),
@@ -112,7 +129,7 @@ class SignUpActivity : ComponentActivity() {
                     },
                 )
                 Text(
-                    text = "닉네임은 8글자까지 가능합니다",
+                    text = "닉네임은 ${maxChar}글자까지 가능합니다",
                     modifier = Modifier
                         .padding(horizontal = 35.dp)
                         .fillMaxWidth(),
@@ -120,7 +137,9 @@ class SignUpActivity : ComponentActivity() {
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        runBlocking { launch { signUpNewUser(email,password) } }
+                    },
                     modifier = Modifier
                         .padding(horizontal = 30.dp)
                         .fillMaxWidth(),

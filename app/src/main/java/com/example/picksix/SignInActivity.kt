@@ -69,15 +69,15 @@ class SignInActivity : ComponentActivity() {
                     .background(Color.LightGray),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var userName by remember { mutableStateOf("") }
+                var email by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
-                val maxChar = 8
+                val maxChar = 20
                 Spacer(modifier = Modifier.height(30.dp))
                 TextField(
-                    value = userName,
-                    onValueChange = { if (it.length <= maxChar) userName = it },
+                    value = email,
+                    onValueChange = { if (it.length <= maxChar) email = it },
                     label = {
-                        Text(text = "username")
+                        Text(text = "email")
                     },
                 )
                 Spacer(modifier = Modifier.height(40.dp))
