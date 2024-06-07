@@ -90,6 +90,9 @@ class MainActivity : ComponentActivity() {
                     fontWeight = FontWeight.Bold
                 )
             }
+            Button(onClick = { dateFunction() }) {
+
+            }
         }
     }
 
