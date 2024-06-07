@@ -86,7 +86,8 @@ class PicksActivity : ComponentActivity() {
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
-                            modifier = Modifier.size(60.dp)
+                            modifier = Modifier
+                                .size(60.dp)
                                 .border(1.dp, Color.Red, CircleShape)
                         ) {
                             Image(

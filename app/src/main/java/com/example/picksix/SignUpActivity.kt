@@ -156,7 +156,7 @@ class SignUpActivity : ComponentActivity() {
                             }
                         }.onSuccess {
                             // 회원가입 성공 시 수행할 작업
-                            val toast = Toast.makeText(context,"회원가입 완료",Toast.LENGTH_SHORT)
+                            val toast = Toast.makeText(context, "회원가입 완료", Toast.LENGTH_SHORT)
                             toast.show()
                             context?.finish()
                         }.onFailure { e ->
@@ -164,7 +164,7 @@ class SignUpActivity : ComponentActivity() {
                             // 예외 처리
                             Log.e("SignUpError", "회원가입 중 오류 발생: ${e.message}", e)
                             // 적절한 오류 처리 작업 수행
-                            val message = when{
+                            val message = when {
                                 e.message?.contains("Unable to validate email address: invalid format") == true -> "올바른 이메일 형식을 입력해주세요"
                                 e.message?.contains("Password should be at least 6 characters.") == true -> "비밀번호는 최소 6자리 이상 입력해주세요"
                                 e.message?.contains("Anonymous sign-ins are disabled") == true -> "이메일을 입력해주세요"
