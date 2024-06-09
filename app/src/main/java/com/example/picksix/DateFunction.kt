@@ -12,10 +12,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GameData(
     val id: Int? = null,
-    val gameDate: String,
-    val homeTeam: String,
-    val awayTeam: String,
+    val game_date: String,
+    val home_team: String,
+    val away_team: String,
+    val win: Int? = null,
 )
+
+val gameData = gamesWeek18.map { game ->
+    GameData(
+        game_date = game.gameDate,
+        home_team = game.homeTeam.name,
+        away_team = game.awayTeam.name,
+    )
+}
 
 
 
@@ -23,7 +32,7 @@ fun dateFunction() {
     runBlocking {
         launch {
             withContext(Dispatchers.IO) {
-                supabase.from("week1_schedule").insert(gamesWeek1){
+                supabase.from("week18_schedule").insert(gameData) {
 
                 }
             }

@@ -1,5 +1,7 @@
 package com.example.picksix
 
+import kotlinx.serialization.Serializable
+
 data class Week(
     val week: Int,
     val period: String
@@ -25,6 +27,7 @@ val weekList = listOf(
     Week(week = 17, period = "Dec 25 - 30"),
     Week(week = 18, period = "Jan 4 - 5"),
 )
+
 
 data class Game(
     val gameDate: String,
@@ -170,7 +173,12 @@ val gamesWeek2 = listOf(
         "MON 9/16 • LOCKS @ 2:00 AM",
         giants,
         commanders
-    ), //save
+    ),
+    Game(
+        "MON 9/16 • LOCKS @ 5:05 AM",
+        rams,
+        cardinals
+    ),
     Game(
         "MON 9/16 • LOCKS @ 5:25 AM",
         steelers,
@@ -190,11 +198,6 @@ val gamesWeek2 = listOf(
         "TUE 9/17 • LOCKS @ 9:15 AM",
         falcons,
         eagles
-    ),
-    Game(
-        "TUE 9/10 • LOCKS @ 9:20 AM",
-        jets,
-        niners
     ),
 )
 
@@ -1465,4 +1468,4 @@ val gamesWeekList = listOf(
     gamesWeek16,
     gamesWeek17,
     gamesWeek18,
-    )
+)
