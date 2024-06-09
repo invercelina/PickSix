@@ -1,6 +1,7 @@
 package com.example.picksix
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -74,6 +75,7 @@ class PicksActivity : ComponentActivity() {
             item {
                 val week1Predict by remember { mutableStateOf(MutableList<Boolean?>(gamesWeek1.size) { null }) }
                 var clickWeek by remember { mutableStateOf(1) }
+                val context = LocalContext.current as? Activity
                 Column(
                     modifier = Modifier
                         .height(130.dp)
@@ -89,7 +91,10 @@ class PicksActivity : ComponentActivity() {
                     ) {
                         // 이 버튼은 ProfileActivity로 가는 버튼입니다
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                val intent = Intent(context, ProfileActivity::class.java)
+                                context?.startActivity(intent)
+                            },
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
                             modifier = Modifier
                                 .size(60.dp)
@@ -176,10 +181,10 @@ class PicksActivity : ComponentActivity() {
                                 }
                             }
                         }.onSuccess {
-                            val toast = Toast.makeText(context,"제출이 완료되었습니다", Toast.LENGTH_SHORT)
+                            val toast = Toast.makeText(context, "제출이 완료되었습니다", Toast.LENGTH_SHORT)
                             toast.show()
                         }.onFailure {
-                            val toast = Toast.makeText(context,"제출 실패하였습니다", Toast.LENGTH_SHORT)
+                            val toast = Toast.makeText(context, "제출 실패하였습니다", Toast.LENGTH_SHORT)
                             toast.show()
                         }
                     }) {
