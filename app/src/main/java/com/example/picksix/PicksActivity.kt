@@ -1,6 +1,8 @@
 package com.example.picksix
 
+import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -41,12 +43,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.picksix.ui.theme.PickSixTheme
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PicksActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,9 +72,8 @@ class PicksActivity : ComponentActivity() {
                 .background(Color.LightGray)
         ) {
             item {
-                var clickWeek by remember {
-                    mutableStateOf(1)
-                }
+                val week1Predict by remember { mutableStateOf(MutableList<Boolean?>(gamesWeek1.size) { null }) }
+                var clickWeek by remember { mutableStateOf(1) }
                 Column(
                     modifier = Modifier
                         .height(130.dp)
@@ -83,6 +87,7 @@ class PicksActivity : ComponentActivity() {
                             .height(40.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
+                        // 이 버튼은 ProfileActivity로 가는 버튼입니다
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -105,6 +110,7 @@ class PicksActivity : ComponentActivity() {
                         .height(40.dp)
                         .background(Color.Black)
                 ) {
+                    // 이 버튼은 PicksActivity로 가는 버튼입니다
                     TextButton(
                         onClick = { /*TODO*/ },
                         modifier = Modifier
@@ -113,6 +119,7 @@ class PicksActivity : ComponentActivity() {
                     ) {
                         Text(text = "Make Picks", color = Color.White)
                     }
+                    // 이 버튼은 LeaderboardActivity로 가는 버튼입니다
                     TextButton(
                         onClick = { /*TODO*/ },
                         modifier = Modifier
@@ -148,8 +155,36 @@ class PicksActivity : ComponentActivity() {
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-                gamesWeekList[clickWeek - 1].forEach { gamesWeek ->
-                    GameCard(gamesWeek)
+                gamesWeekList[clickWeek - 1].forEachIndexed { index, gamesOfWeek ->
+                    GameCard(
+                        game = gamesOfWeek,
+                        onClick = { clicked -> week1Predict[index] = clicked })
+                    Text(text = "$week1Predict")
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // 이 버튼은 픽 제출할 때 쓰는 버튼입니다
+                    val context = LocalContext.current as? Activity
+                    Button(onClick = {
+                        runCatching {
+                            runBlocking {
+                                launch {
+                                    week1Prediction = week1Predict
+                                    predictionFunction()
+                                }
+                            }
+                        }.onSuccess {
+                            val toast = Toast.makeText(context,"제출이 완료되었습니다", Toast.LENGTH_SHORT)
+                            toast.show()
+                        }.onFailure {
+                            val toast = Toast.makeText(context,"제출 실패하였습니다", Toast.LENGTH_SHORT)
+                            toast.show()
+                        }
+                    }) {
+                        Text(text = "Submit")
+                    }
                 }
             }
         }
@@ -182,8 +217,8 @@ class PicksActivity : ComponentActivity() {
     }
 
     // 게임 카드
-    @Composable
-    fun GameCard(game: Game) {
+    @Composable // save
+    fun GameCard(game: Game, onClick: (Boolean?) -> Unit) {
         Column {
             OutlinedCard(
                 modifier = Modifier
@@ -193,7 +228,7 @@ class PicksActivity : ComponentActivity() {
                 border = BorderStroke(1.dp, Color.LightGray),
                 elevation = CardDefaults.elevatedCardElevation(8.dp)
             ) {
-                var isClicked by remember { mutableStateOf(2) }
+                var isClicked by remember { mutableStateOf<Boolean?>(null) }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -216,13 +251,16 @@ class PicksActivity : ComponentActivity() {
                                 modifier = Modifier.padding(horizontal = 10.dp),
                                 shadowElevation = 8.dp,
                                 color = Color.White,
-                                border = if (isClicked == 0) {
+                                border = if (isClicked == true) {
                                     BorderStroke(2.dp, Color.Blue)
                                 } else null
                             ) {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.clickable { isClicked = 0 }
+                                    modifier = Modifier.clickable {
+                                        isClicked = true
+                                        onClick(isClicked)
+                                    }
                                 ) {
                                     Column(
                                         modifier = Modifier
@@ -259,14 +297,17 @@ class PicksActivity : ComponentActivity() {
                                 modifier = Modifier.padding(horizontal = 10.dp),
                                 shadowElevation = 8.dp,
                                 color = Color.White,
-                                border = if (isClicked == 1) {
+                                border = if (isClicked == false) {
                                     BorderStroke(2.dp, Color.Blue)
                                 } else null
                             ) {
 
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.clickable { isClicked = 1 }
+                                    modifier = Modifier.clickable {
+                                        isClicked = false
+                                        onClick(isClicked)
+                                    }
                                 ) {
                                     Column(
                                         modifier = Modifier
