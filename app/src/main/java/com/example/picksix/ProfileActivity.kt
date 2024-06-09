@@ -22,9 +22,12 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +38,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.picksix.ui.theme.PickSixTheme
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.filter.PostgrestFilterBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +63,7 @@ class ProfileActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             var preferTeam by remember { mutableStateOf<NFLTeams?>(null) }
+            var emailData by remember { mutableStateOf("이메일") }
             Spacer(modifier = Modifier.height(100.dp))
             Image(
                 painter = painterResource(
@@ -71,20 +82,30 @@ class ProfileActivity : ComponentActivity() {
                     .width(300.dp)
                     .padding(10.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
             )
-            Text(text = "여기 이메일 들어갑니다", modifier = Modifier.width(300.dp), fontSize = 18.sp)
+            Text(text = emailData, modifier = Modifier.width(300.dp), fontSize = 18.sp)
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(modifier = Modifier
-                .padding(start = 50.dp)
-                .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier
+                    .padding(start = 50.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     text = "Point", modifier = Modifier
                         .width(200.dp)
-                        .padding(start = 8.dp,end = 10.dp),
+                        .padding(start = 8.dp, end = 10.dp),
                     fontSize = 20.sp, fontWeight = FontWeight.Bold
                 )
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = {
+                    runBlocking {
+                        launch {
+                            getEmail { newEmail ->
+                                emailData = newEmail
+                            }
+                        }
+                    }
+                }) {
                     Text(text = "갱신")
                 }
             }
@@ -126,6 +147,20 @@ class ProfileActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    suspend fun getEmail(onEmailReceived: (String) -> Unit) {
+        withContext(Dispatchers.IO) {
+            // 예시: Supabase에서 이메일 데이터를 가져오는 코드
+            val email = supabase.from("profiles").select(columns = Columns.list("email")) {
+                filter {
+                    if (userId != null) {
+                        eq("id", userId)
+                    }
+                }
+            } // execute()를 사용하여 실제 요청을 수행
+            onEmailReceived(email.toString()) // 받은 이메일 데이터를 콜백 함수로 전달
         }
     }
 

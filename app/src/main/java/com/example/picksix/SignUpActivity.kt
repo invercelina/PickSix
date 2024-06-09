@@ -45,14 +45,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
-val supabase = createSupabaseClient(
-    supabaseUrl = BuildConfig.supabaseUrl,
-    supabaseKey = BuildConfig.supabaseKey
-) {
-    install(Postgrest)
-    install(Auth)
-}
-
 suspend fun signUpNewUser(userMail: String, userPassword: String, nickname: String) {
     supabase.auth.signUpWith(Email) {
         email = userMail
