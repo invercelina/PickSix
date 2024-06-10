@@ -1,11 +1,5 @@
 package com.example.picksix
 
-import android.provider.ContactsContract.CommonDataKinds.Nickname
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +20,9 @@ suspend fun getEmail(onEmailReceived: (String) -> Unit) {
         // 예시: Supabase에서 이메일 데이터를 가져오는 코드
         val email = supabase.from("profiles").select(columns = Columns.list("email")) {
             filter {
-                if (userId != null) {
-                    eq("id", userId)
+                val currentUserId = userId
+                if (currentUserId != null) {
+                    eq("id", currentUserId)
                 }
             }
         }
@@ -40,8 +35,9 @@ suspend fun getPoint(onPointReceived: (String) -> Unit) {
         // 예시: Supabase에서 포인트 데이터를 가져오는 코드
         val point = supabase.from("profiles").select(columns = Columns.list("point")) {
             filter {
-                if (userId != null) {
-                    eq("id", userId)
+                val currentUserId = userId
+                if (currentUserId != null) {
+                    eq("id", currentUserId)
                 }
             }
         }

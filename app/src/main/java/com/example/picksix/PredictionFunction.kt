@@ -10,9 +10,15 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
-val auth = supabase.auth
-val currentUser = auth.currentUserOrNull()
-val userId = currentUser?.id
+//val auth = supabase.auth
+//val currentUser = auth.currentUserOrNull()
+//val userId = currentUser?.id
+var userId: String? = null
+
+fun updateUserId() {
+    val currentUser = supabase.auth.currentUserOrNull()
+    userId = currentUser?.id
+}
 
 
 var week1Prediction: MutableList<Boolean?> = MutableList(gamesWeek1.size) { null }

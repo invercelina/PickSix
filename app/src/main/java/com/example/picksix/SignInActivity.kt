@@ -120,6 +120,7 @@ class SignInActivity : ComponentActivity() {
 
                         }.onSuccess {
                             // 로그인 성공 시 수행할 작업
+                            updateUserId()
                             val intent = Intent(context, PicksActivity::class.java)
                             context?.startActivity(intent)
                         }.onFailure { e ->
