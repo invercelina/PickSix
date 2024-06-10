@@ -1,5 +1,7 @@
 package com.example.picksix
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import kotlinx.serialization.Serializable
 
 data class Week(
@@ -33,6 +35,7 @@ data class Game(
     val gameDate: String,
     val homeTeam: NFLTeams,
     val awayTeam: NFLTeams,
+    var isHomeTeamClicked: MutableState<Boolean?> = mutableStateOf(null)
 )
 
 val gamesWeek1 = listOf(

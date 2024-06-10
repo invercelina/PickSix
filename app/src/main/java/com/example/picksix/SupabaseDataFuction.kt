@@ -21,3 +21,30 @@ data class Profile(
     val team: String? = null
 )
 
+suspend fun getEmail(onEmailReceived: (String) -> Unit) {
+    withContext(Dispatchers.IO) {
+        // 예시: Supabase에서 이메일 데이터를 가져오는 코드
+        val email = supabase.from("profiles").select(columns = Columns.list("email")) {
+            filter {
+                if (userId != null) {
+                    eq("id", userId)
+                }
+            }
+        }
+        onEmailReceived(email.data) // 받은 이메일 데이터를 콜백 함수로 전달
+    }
+}
+
+suspend fun getPoint(onPointReceived: (String) -> Unit) {
+    withContext(Dispatchers.IO) {
+        // 예시: Supabase에서 포인트 데이터를 가져오는 코드
+        val point = supabase.from("profiles").select(columns = Columns.list("point")) {
+            filter {
+                if (userId != null) {
+                    eq("id", userId)
+                }
+            }
+        }
+        onPointReceived(point.data) // 받은 포인트 데이터를 콜백 함수로 전달
+    }
+}

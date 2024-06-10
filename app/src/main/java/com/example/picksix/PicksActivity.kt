@@ -73,9 +73,12 @@ class PicksActivity : ComponentActivity() {
                 .background(Color.LightGray)
         ) {
             item {
-                val week1Predict by remember { mutableStateOf(MutableList<Boolean?>(gamesWeek1.size) { null }) }
+
                 var clickWeek by remember { mutableStateOf(1) }
+                var emailData by remember { mutableStateOf("") }
+                var pointData by remember { mutableStateOf("") }
                 val context = LocalContext.current as? Activity
+
                 Column(
                     modifier = Modifier
                         .height(130.dp)
@@ -90,9 +93,30 @@ class PicksActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.End
                     ) {
                         // 이 버튼은 ProfileActivity로 가는 버튼입니다
+
                         Button(
                             onClick = {
                                 val intent = Intent(context, ProfileActivity::class.java)
+                                runBlocking {
+                                    launch {
+                                        getEmail { newMail ->
+                                            emailData = newMail
+                                        }
+                                        var emailEx = ""
+                                        for (i in 11..emailData.length - 4) {
+                                            emailEx += emailData[i]
+                                        }
+                                        intent.putExtra("emailData", emailEx)
+                                        getPoint { newPoint ->
+                                            pointData = newPoint
+                                        }
+                                        var pointEx = ""
+                                        for (i in 10..pointData.length-3){
+                                            pointEx += pointData[i]
+                                        }
+                                        intent.putExtra("pointData",pointEx)
+                                    }
+                                }
                                 context?.startActivity(intent)
                             },
                             colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -163,8 +187,7 @@ class PicksActivity : ComponentActivity() {
                 gamesWeekList[clickWeek - 1].forEachIndexed { index, gamesOfWeek ->
                     GameCard(
                         game = gamesOfWeek,
-                        onClick = { clicked -> week1Predict[index] = clicked })
-                    Text(text = "$week1Predict")
+                        onClick = { clicked -> week1Prediction[index] = clicked })
                 }
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -176,7 +199,6 @@ class PicksActivity : ComponentActivity() {
                         runCatching {
                             runBlocking {
                                 launch {
-                                    week1Prediction = week1Predict
                                     predictionFunction()
                                 }
                             }
@@ -223,7 +245,10 @@ class PicksActivity : ComponentActivity() {
 
     // 게임 카드
     @Composable // save
-    fun GameCard(game: Game, onClick: (Boolean?) -> Unit) {
+    fun GameCard(
+        game: Game,
+        onClick: (Boolean?) -> Unit
+    ) {
         Column {
             OutlinedCard(
                 modifier = Modifier
@@ -233,7 +258,7 @@ class PicksActivity : ComponentActivity() {
                 border = BorderStroke(1.dp, Color.LightGray),
                 elevation = CardDefaults.elevatedCardElevation(8.dp)
             ) {
-                var isClicked by remember { mutableStateOf<Boolean?>(null) }
+
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -250,21 +275,22 @@ class PicksActivity : ComponentActivity() {
                             .height(150.dp)
                             .padding(horizontal = 15.dp)
                     ) {
+
                         Box(modifier = Modifier.weight(1f)) {
                             Surface(
                                 shape = RoundedCornerShape(15.dp),
                                 modifier = Modifier.padding(horizontal = 10.dp),
                                 shadowElevation = 8.dp,
                                 color = Color.White,
-                                border = if (isClicked == true) {
+                                border = if (game.isHomeTeamClicked.value == true) {
                                     BorderStroke(2.dp, Color.Blue)
                                 } else null
                             ) {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.clickable {
-                                        isClicked = true
-                                        onClick(isClicked)
+                                        game.isHomeTeamClicked.value = true
+                                        onClick(game.isHomeTeamClicked.value)
                                     }
                                 ) {
                                     Column(
@@ -302,7 +328,7 @@ class PicksActivity : ComponentActivity() {
                                 modifier = Modifier.padding(horizontal = 10.dp),
                                 shadowElevation = 8.dp,
                                 color = Color.White,
-                                border = if (isClicked == false) {
+                                border = if (game.isHomeTeamClicked.value == false) {
                                     BorderStroke(2.dp, Color.Blue)
                                 } else null
                             ) {
@@ -310,8 +336,8 @@ class PicksActivity : ComponentActivity() {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier.clickable {
-                                        isClicked = false
-                                        onClick(isClicked)
+                                        game.isHomeTeamClicked.value = false
+                                        onClick(game.isHomeTeamClicked.value)
                                     }
                                 ) {
                                     Column(

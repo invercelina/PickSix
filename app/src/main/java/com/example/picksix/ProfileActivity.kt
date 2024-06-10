@@ -63,7 +63,7 @@ class ProfileActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             var preferTeam by remember { mutableStateOf<NFLTeams?>(null) }
-            var emailData by remember { mutableStateOf("이메일") }
+
             Spacer(modifier = Modifier.height(100.dp))
             Image(
                 painter = painterResource(
@@ -82,7 +82,11 @@ class ProfileActivity : ComponentActivity() {
                     .width(300.dp)
                     .padding(10.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
             )
-            Text(text = emailData, modifier = Modifier.width(300.dp), fontSize = 18.sp)
+            Text(
+                text = intent.getStringExtra("emailData") ?: "null",
+                modifier = Modifier.width(300.dp),
+                fontSize = 18.sp
+            )
             Spacer(modifier = Modifier.height(20.dp))
 
             Row(
@@ -97,19 +101,8 @@ class ProfileActivity : ComponentActivity() {
                         .padding(start = 8.dp, end = 10.dp),
                     fontSize = 20.sp, fontWeight = FontWeight.Bold
                 )
-                Button(onClick = {
-                    runBlocking {
-                        launch {
-                            getEmail { newEmail ->
-                                emailData = newEmail
-                            }
-                        }
-                    }
-                }) {
-                    Text(text = "갱신")
-                }
             }
-            Text(text = "여기 포인트 들어갑니다", modifier = Modifier.width(300.dp), fontSize = 18.sp)
+            Text(text = intent.getStringExtra("pointData") ?: "null", modifier = Modifier.width(300.dp), fontSize = 18.sp)
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "선호팀", modifier = Modifier
@@ -150,19 +143,6 @@ class ProfileActivity : ComponentActivity() {
         }
     }
 
-    suspend fun getEmail(onEmailReceived: (String) -> Unit) {
-        withContext(Dispatchers.IO) {
-            // 예시: Supabase에서 이메일 데이터를 가져오는 코드
-            val email = supabase.from("profiles").select(columns = Columns.list("email")) {
-                filter {
-                    if (userId != null) {
-                        eq("id", userId)
-                    }
-                }
-            } // execute()를 사용하여 실제 요청을 수행
-            onEmailReceived(email.toString()) // 받은 이메일 데이터를 콜백 함수로 전달
-        }
-    }
 
     @Composable
     @Preview(showBackground = true)
