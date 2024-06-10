@@ -111,10 +111,10 @@ class PicksActivity : ComponentActivity() {
                                             pointData = newPoint
                                         }
                                         var pointEx = ""
-                                        for (i in 10..pointData.length-3){
+                                        for (i in 10..pointData.length - 3) {
                                             pointEx += pointData[i]
                                         }
-                                        intent.putExtra("pointData",pointEx)
+                                        intent.putExtra("pointData", pointEx)
                                     }
                                 }
                                 context?.startActivity(intent)

@@ -44,3 +44,35 @@ suspend fun getPoint(onPointReceived: (String) -> Unit) {
         onPointReceived(point.data) // 받은 포인트 데이터를 콜백 함수로 전달
     }
 }
+
+suspend fun preferTeamUpdate(team: String) {
+    withContext(Dispatchers.IO) {
+        supabase.from("profiles").update(
+            {
+                set("team", team)
+            }
+        ) {
+            filter {
+                val currentUserId = userId
+                if (currentUserId != null) {
+                    eq("id", currentUserId)
+                }
+            }
+        }
+    }
+}
+
+suspend fun getTeam(onTeamReceived: (String) -> Unit) {
+    withContext(Dispatchers.IO) {
+        // 예시: Supabase에서 포인트 데이터를 가져오는 코드
+        val team = supabase.from("profiles").select(columns = Columns.list("team")) {
+            filter {
+                val currentUserId = userId
+                if (currentUserId != null) {
+                    eq("id", currentUserId)
+                }
+            }
+        }
+        onTeamReceived(team.data) // 받은 포인트 데이터를 콜백 함수로 전달
+    }
+}

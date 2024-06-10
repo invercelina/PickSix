@@ -69,9 +69,9 @@ fun predictionFunction() {
                     game16_prediction = week1Prediction.getOrNull(15)
                 )
                 withContext(Dispatchers.IO) {
-                    Log.d("week1Prediction", week1Prediction.toString())
-                    Log.d("week1PredictGetOrNull", week1Prediction.getOrNull(0).toString())
-                    Log.d("week1PredictSubmit", week1PredictSubmit.toString())
+//                    Log.d("week1Prediction", week1Prediction.toString())
+//                    Log.d("week1PredictGetOrNull", week1Prediction.getOrNull(0).toString())
+//                    Log.d("week1PredictSubmit", week1PredictSubmit.toString())
                     supabase.from("week01_predictions").insert(week1PredictSubmit)
                 }
             }

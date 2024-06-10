@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -59,16 +60,25 @@ class ProfileActivity : ComponentActivity() {
     @Composable
     fun ProfileScreen() {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Yellow),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             var preferTeam by remember { mutableStateOf<NFLTeams?>(null) }
+            var gettingTeam = ""
+            runBlocking { launch { getTeam { newTeam -> gettingTeam = newTeam } } }
+            nflTeams.forEach {
+                if (gettingTeam.contains(it.name)) {
+                    preferTeam = it
+                }
+            }
 
             Spacer(modifier = Modifier.height(100.dp))
             Image(
                 painter = painterResource(
                     id = if (preferTeam != null) {
-                        (preferTeam as? NFLTeams)?.logo ?: R.drawable.baseline_person_24
+                        preferTeam?.logo ?: R.drawable.baseline_person_24
                     } else R.drawable.baseline_person_24
                 ),
                 contentDescription = "logo",
@@ -80,34 +90,37 @@ class ProfileActivity : ComponentActivity() {
             Text(
                 text = "이메일", modifier = Modifier
                     .width(300.dp)
-                    .padding(10.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
+                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
             )
             Text(
                 text = intent.getStringExtra("emailData") ?: "null",
-                modifier = Modifier.width(300.dp),
+                modifier = Modifier
+                    .width(300.dp)
+                    .padding(start = 100.dp),
                 fontSize = 18.sp
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
+
+            Text(
+                text = "Point", modifier = Modifier
+                    .width(300.dp)
+                    .padding(16.dp),
+                fontSize = 20.sp, fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = intent.getStringExtra("pointData") ?: "null",
                 modifier = Modifier
-                    .padding(start = 50.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Point", modifier = Modifier
-                        .width(200.dp)
-                        .padding(start = 8.dp, end = 10.dp),
-                    fontSize = 20.sp, fontWeight = FontWeight.Bold
-                )
-            }
-            Text(text = intent.getStringExtra("pointData") ?: "null", modifier = Modifier.width(300.dp), fontSize = 18.sp)
+                    .width(300.dp)
+                    .padding(start = 100.dp),
+                fontSize = 18.sp
+            )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "선호팀", modifier = Modifier
                     .width(300.dp)
-                    .padding(10.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
+                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
             )
             Box {
                 var expandedStatus by remember { mutableStateOf(false) }
@@ -118,8 +131,9 @@ class ProfileActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
                 ) {
+                    val teamName = preferTeam?.name ?: "선호팀"
                     Text(
-                        text = "선호팀", color = Color.Black, modifier = Modifier
+                        text = teamName, color = Color.Black, modifier = Modifier
                             .padding(horizontal = 20.dp)
                             .weight(1f)
                     )
@@ -135,6 +149,7 @@ class ProfileActivity : ComponentActivity() {
                     nflTeams.forEach {
                         Text(text = it.name, modifier = Modifier.clickable {
                             preferTeam = it
+                            runBlocking { launch { preferTeamUpdate(it.name) } }
                             expandedStatus = false
                         })
                     }
