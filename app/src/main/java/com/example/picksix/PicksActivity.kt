@@ -37,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.picksix.ui.theme.PickSixTheme
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -73,10 +75,11 @@ class PicksActivity : ComponentActivity() {
                 .background(Color.LightGray)
         ) {
             item {
-
+                var isPickScreen by remember { mutableStateOf(true) }
                 var clickWeek by remember { mutableStateOf(1) }
                 var emailData by remember { mutableStateOf("") }
                 var pointData by remember { mutableStateOf("") }
+                var leaderList by remember { mutableStateOf<List<Leader>>(listOf()) }
                 val context = LocalContext.current as? Activity
 
                 Column(
@@ -141,7 +144,7 @@ class PicksActivity : ComponentActivity() {
                 ) {
                     // 이 버튼은 PicksActivity로 가는 버튼입니다
                     TextButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { isPickScreen = true },
                         modifier = Modifier
                             .fillMaxHeight()
                             .weight(1f)
@@ -150,7 +153,7 @@ class PicksActivity : ComponentActivity() {
                     }
                     // 이 버튼은 LeaderboardActivity로 가는 버튼입니다
                     TextButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { isPickScreen = false },
                         modifier = Modifier
                             .fillMaxHeight()
                             .weight(1f)
@@ -158,59 +161,98 @@ class PicksActivity : ComponentActivity() {
                         Text(text = "Leaderboard", color = Color.White)
                     }
                 }
-                Spacer(modifier = Modifier.height(15.dp))
-                Column(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Makes Your Picks Now", fontWeight = FontWeight.Black)
-                    Text("Make at least one pick to get started!\nWinning Picks are worth 10 points.")
-                }
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White)
-                ) {
-                    item {
-                        weekList.forEach { week ->
-                            WeekMain(week = week,
-                                isSelected = (clickWeek == week.week),
-                                onClick = {
-                                    clickWeek = it
-                                })
+                if (isPickScreen) {
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Column(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Makes Your Picks Now", fontWeight = FontWeight.Black)
+                        Text("Make at least one pick to get started!\nWinning Picks are worth 10 points.")
+                    }
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White)
+                    ) {
+                        item {
+                            weekList.forEach { week ->
+                                WeekMain(week = week,
+                                    isSelected = (clickWeek == week.week),
+                                    onClick = {
+                                        clickWeek = it
+                                    })
+                            }
                         }
                     }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                gamesWeekList[clickWeek - 1].forEachIndexed { index, gamesOfWeek ->
-                    GameCard(
-                        game = gamesOfWeek,
-                        onClick = { clicked -> week1Prediction[index] = clicked })
-                }
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // 이 버튼은 픽 제출할 때 쓰는 버튼입니다
-                    val context = LocalContext.current as? Activity
-                    Button(onClick = {
-                        runCatching {
-                            runBlocking {
-                                launch {
-                                    predictionFunction()
+                    Spacer(modifier = Modifier.height(10.dp))
+                    gamesWeekList[clickWeek - 1].forEachIndexed { index, gamesOfWeek ->
+                        GameCard(
+                            game = gamesOfWeek,
+                            onClick = { clicked -> week1Prediction[index] = clicked })
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        // 이 버튼은 픽 제출할 때 쓰는 버튼입니다
+
+                        Button(onClick = {
+                            runCatching {
+                                runBlocking {
+                                    launch {
+                                        predictionFunction()
+                                    }
                                 }
+                            }.onSuccess {
+                                val toast =
+                                    Toast.makeText(context, "제출이 완료되었습니다", Toast.LENGTH_SHORT)
+                                toast.show()
+                            }.onFailure {
+                                val toast =
+                                    Toast.makeText(context, "제출 실패하였습니다", Toast.LENGTH_SHORT)
+                                toast.show()
                             }
-                        }.onSuccess {
-                            val toast = Toast.makeText(context, "제출이 완료되었습니다", Toast.LENGTH_SHORT)
-                            toast.show()
-                        }.onFailure {
-                            val toast = Toast.makeText(context, "제출 실패하였습니다", Toast.LENGTH_SHORT)
-                            toast.show()
+                        }) {
+                            Text(text = "Submit")
                         }
-                    }) {
-                        Text(text = "Submit")
+                    }
+                } else {
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Column(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Leaderboard", fontWeight = FontWeight.Black, fontSize = 50.sp)
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(550.dp)
+                            .background(Color.White)
+                    ) {
+                        runBlocking { launch { leaderList = getLeaders() } }
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            leaderList.forEach {
+                                Text(text = "${it.nickname}")
+                            }
+                        }
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            leaderList.forEach {
+                                Text(text = "${it.point}")
+                            }
+                        }
                     }
                 }
             }

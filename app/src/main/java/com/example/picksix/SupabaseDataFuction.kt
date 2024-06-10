@@ -7,12 +7,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Profile(
-    val id: String? = null,
-    val email: String,
+data class Leader(
     val nickname: String? = null,
     val point: Int,
-    val team: String? = null
 )
 
 suspend fun getEmail(onEmailReceived: (String) -> Unit) {
@@ -76,3 +73,10 @@ suspend fun getTeam(onTeamReceived: (String) -> Unit) {
         onTeamReceived(team.data) // 받은 포인트 데이터를 콜백 함수로 전달
     }
 }
+
+suspend fun getLeaders(): List<Leader> {
+    val result = supabase.from("profiles").select(columns = Columns.list("nickname","point"))
+        .decodeAs<List<Leader>>()
+    return result.sortedByDescending { it.point }
+}
+

@@ -1,6 +1,7 @@
 package com.example.picksix
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -73,6 +74,7 @@ class ProfileActivity : ComponentActivity() {
                     preferTeam = it
                 }
             }
+
 
             Spacer(modifier = Modifier.height(100.dp))
             Image(
