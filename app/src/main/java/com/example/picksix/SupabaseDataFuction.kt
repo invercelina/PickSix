@@ -76,7 +76,7 @@ suspend fun getTeam(onTeamReceived: (String) -> Unit) {
 }
 
 suspend fun getLeaders(): List<Leader> {
-    val result = supabase.from("profiles").select(columns = Columns.list("nickname","point"))
+    val result = supabase.from("profiles").select(columns = Columns.list("nickname", "point"))
         .decodeAs<List<Leader>>()
     return result.sortedByDescending { it.point }
 }

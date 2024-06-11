@@ -260,10 +260,20 @@ class PicksActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(text = "Nickname", fontSize = 20.sp, fontWeight = FontWeight.Black)
-                            Divider(modifier = Modifier.height(1.dp).fillMaxWidth(),color = Color.Black)
+                            Divider(
+                                modifier = Modifier
+                                    .height(1.dp)
+                                    .fillMaxWidth(),
+                                color = Color.Black
+                            )
                             leaderList.forEach {
                                 Text(text = "${it.nickname}")
-                                Divider(modifier = Modifier.height(1.dp).fillMaxWidth(),color = Color.LightGray)
+                                Divider(
+                                    modifier = Modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth(),
+                                    color = Color.LightGray
+                                )
                             }
                         }
                         Column(
@@ -271,10 +281,17 @@ class PicksActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(text = "Point", fontSize = 20.sp, fontWeight = FontWeight.Black)
-                            Divider(modifier = Modifier.height(1.dp).fillMaxWidth())
+                            Divider(modifier = Modifier
+                                .height(1.dp)
+                                .fillMaxWidth())
                             leaderList.forEach {
                                 Text(text = "${it.point}")
-                                Divider(modifier = Modifier.height(1.dp).fillMaxWidth(), color = Color.LightGray)
+                                Divider(
+                                    modifier = Modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth(),
+                                    color = Color.LightGray
+                                )
                             }
                         }
                     }

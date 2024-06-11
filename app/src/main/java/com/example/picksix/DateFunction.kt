@@ -27,7 +27,6 @@ val gameData = gamesWeek18.map { game ->
 }
 
 
-
 fun dateFunction() {
     runBlocking {
         launch {
