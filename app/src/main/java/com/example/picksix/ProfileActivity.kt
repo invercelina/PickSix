@@ -81,7 +81,11 @@ class ProfileActivity : ComponentActivity() {
                 contentDescription = "logo",
                 modifier = Modifier
                     .size(180.dp)
-                    .border(4.dp, Color(0xFFFF7043), RoundedCornerShape(15.dp)) // Bright coral
+                    .border(
+                        4.dp,
+                        preferTeam?.color ?: Color.Red,
+                        RoundedCornerShape(15.dp)
+                    ) // Bright coral
                     .padding(8.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -161,6 +165,7 @@ class ProfileActivity : ComponentActivity() {
             )
         }
     }
+
     @Composable
     fun LottieFootballAnimation() {
         val composition by rememberLottieComposition(
@@ -175,7 +180,7 @@ class ProfileActivity : ComponentActivity() {
                 initialProgress = 0f
             )
         }
-        Box() {
+        Box {
             LottieAnimation(
                 composition = composition,
                 progress = { lottieAnimatable.progress }

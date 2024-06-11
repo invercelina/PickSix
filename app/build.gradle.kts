@@ -94,5 +94,5 @@ dependencies {
     implementation(platform("io.github.jan-tennert.supabase:bom:2.4.3"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.ktor:ktor-client-android:2.3.11")
-    implementation ("com.airbnb.android:lottie-compose:6.4.1")
+    implementation("com.airbnb.android:lottie-compose:6.4.1")
 }
