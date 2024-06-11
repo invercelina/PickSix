@@ -3,6 +3,9 @@ package com.example.picksix
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +68,7 @@ class ProfileActivity : ComponentActivity() {
                 }
             }
 
-            Spacer(modifier = Modifier.height(72.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             Image(
                 painter = painterResource(
                     id = if (preferTeam != null) {
@@ -73,45 +77,20 @@ class ProfileActivity : ComponentActivity() {
                 ),
                 contentDescription = "logo",
                 modifier = Modifier
-                    .size(200.dp)
-                    .border(2.dp, Color(0xFFFF7043), RoundedCornerShape(15.dp)) // Bright coral
+                    .size(180.dp)
+                    .border(4.dp, Color(0xFFFF7043), RoundedCornerShape(15.dp)) // Bright coral
+                    .padding(8.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))
+            ProfileInfoField(label = "이메일", value = intent.getStringExtra("emailData") ?: "null")
+            ProfileInfoField(label = "Point", value = intent.getStringExtra("pointData") ?: "null")
             Text(
-                text = "이메일", modifier = Modifier
-                    .width(300.dp)
-                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333) // Dark grey for readability
-            )
-            Text(
-                text = intent.getStringExtra("emailData") ?: "null",
+                text = "선호팀",
                 modifier = Modifier
                     .width(300.dp)
-                    .padding(start = 100.dp),
-                fontSize = 18.sp,
-                color = Color(0xFF333333) // Dark grey for readability
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                text = "Point", modifier = Modifier
-                    .width(300.dp)
-                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333) // Dark grey for readability
-            )
-            Text(
-                text = intent.getStringExtra("pointData") ?: "null",
-                modifier = Modifier
-                    .width(300.dp)
-                    .padding(start = 100.dp),
-                fontSize = 18.sp,
-                color = Color(0xFF333333) // Dark grey for readability
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "선호팀", modifier = Modifier
-                    .width(300.dp)
-                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                    .padding(8.dp),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333) // Dark grey for readability
             )
             Box {
@@ -125,7 +104,9 @@ class ProfileActivity : ComponentActivity() {
                 ) {
                     val teamName = preferTeam?.name ?: "선호팀"
                     Text(
-                        text = teamName, color = Color.Black, modifier = Modifier
+                        text = teamName,
+                        color = Color.Black,
+                        modifier = Modifier
                             .padding(horizontal = 20.dp)
                             .weight(1f)
                     )
@@ -147,6 +128,31 @@ class ProfileActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    fun ProfileInfoField(label: String, value: String) {
+        Column(
+            modifier = Modifier
+                .width(300.dp)
+                .padding(vertical = 8.dp) // Reduce vertical padding for closer spacing
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color(0xFFFFF3E0)) // Light peach color
+                .padding(16.dp)
+        ) {
+            Text(
+                text = label,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF333333) // Dark grey for readability
+            )
+            Text(
+                text = value,
+                fontSize = 18.sp,
+                color = Color(0xFF333333), // Dark grey for readability
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 

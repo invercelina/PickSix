@@ -116,7 +116,9 @@ class SignUpActivity : ComponentActivity() {
                     },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White // Ensure TextField is white for contrast
+                        unfocusedContainerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black // Ensure TextField is white for contrast
                     )
                 )
 
@@ -129,7 +131,9 @@ class SignUpActivity : ComponentActivity() {
                     visualTransformation = PasswordVisualTransformation(),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White // Ensure TextField is white for contrast
+                        unfocusedContainerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black // Ensure TextField is white for contrast
                     )
                 )
                 Text(
@@ -148,7 +152,9 @@ class SignUpActivity : ComponentActivity() {
                     },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White // Ensure TextField is white for contrast
+                        unfocusedContainerColor = Color.White,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black // Ensure TextField is white for contrast
                     )
                 )
                 Text(
