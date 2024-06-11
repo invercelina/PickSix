@@ -21,6 +21,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieAnimatable
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.picksix.ui.theme.PickSixTheme
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -122,9 +128,12 @@ class ProfileActivity : ComponentActivity() {
                             runBlocking { launch { preferTeamUpdate(it.name) } }
                             expandedStatus = false
                         })
+
+
                     }
                 }
             }
+            LottieFootballAnimation()
         }
     }
 
@@ -152,7 +161,27 @@ class ProfileActivity : ComponentActivity() {
             )
         }
     }
+    @Composable
+    fun LottieFootballAnimation() {
+        val composition by rememberLottieComposition(
+            LottieCompositionSpec.RawRes(R.raw.flyingfootball)
+        )
+        val lottieAnimatable = rememberLottieAnimatable()
 
+        LaunchedEffect(composition) {
+            lottieAnimatable.animate(
+                composition = composition,
+                iterations = LottieConstants.IterateForever,  // 무한 반복
+                initialProgress = 0f
+            )
+        }
+        Box() {
+            LottieAnimation(
+                composition = composition,
+                progress = { lottieAnimatable.progress }
+            )
+        }
+    }
 
     @Composable
     @Preview(showBackground = true)
