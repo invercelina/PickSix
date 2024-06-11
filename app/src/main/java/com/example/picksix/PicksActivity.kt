@@ -85,53 +85,72 @@ class PicksActivity : ComponentActivity() {
                     modifier = Modifier
                         .height(130.dp)
                         .fillMaxWidth()
-                        .background(Color.Black),
+                        .background(Color.Blue),
                     verticalArrangement = Arrangement.Center
                 ) {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(40.dp),
-                        horizontalArrangement = Arrangement.End
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // 이 버튼은 ProfileActivity로 가는 버튼입니다
-
-                        Button(
-                            onClick = {
-                                val intent = Intent(context, ProfileActivity::class.java)
-                                runBlocking {
-                                    launch {
-                                        getEmail { newMail ->
-                                            emailData = newMail
-                                        }
-                                        var emailEx = ""
-                                        for (i in 11..emailData.length - 4) {
-                                            emailEx += emailData[i]
-                                        }
-                                        intent.putExtra("emailData", emailEx)
-                                        getPoint { newPoint ->
-                                            pointData = newPoint
-                                        }
-                                        var pointEx = ""
-                                        for (i in 10..pointData.length - 3) {
-                                            pointEx += pointData[i]
-                                        }
-                                        intent.putExtra("pointData", pointEx)
-                                    }
-                                }
-                                context?.startActivity(intent)
-                            },
-                            colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        Image(
+                            painter = painterResource(id = R.drawable.picksixlogo),
+                            contentDescription = "logo",
+                            modifier = Modifier.size(310.dp, 100.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                        Row(
                             modifier = Modifier
-                                .size(60.dp)
-                                .border(1.dp, Color.Red, CircleShape)
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.baseline_person_24),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.size(40.dp)
-                            )
+                            // 이 버튼은 ProfileActivity로 가는 버튼입니다
+                            Box() {
+                                Button(
+                                    onClick = {
+                                        val intent = Intent(context, ProfileActivity::class.java)
+                                        runBlocking {
+                                            launch {
+                                                getEmail { newMail ->
+                                                    emailData = newMail
+                                                }
+                                                var emailEx = ""
+                                                for (i in 11..emailData.length - 4) {
+                                                    emailEx += emailData[i]
+                                                }
+                                                intent.putExtra("emailData", emailEx)
+                                                getPoint { newPoint ->
+                                                    pointData = newPoint
+                                                }
+                                                var pointEx = ""
+                                                for (i in 10..pointData.length - 3) {
+                                                    pointEx += pointData[i]
+                                                }
+                                                intent.putExtra("pointData", pointEx)
+                                            }
+                                        }
+                                        context?.startActivity(intent)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                                    modifier = Modifier
+                                        .size(40.dp)
+
+                                ) {
+                                }
+                                Image(
+                                    painter = painterResource(id = R.drawable.baseline_person_24),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .border(
+                                            1.dp, Color.Red,
+                                            CircleShape
+                                        )
+                                )
+                            }
                         }
                     }
                 }
