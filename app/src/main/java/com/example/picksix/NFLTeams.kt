@@ -1,7 +1,6 @@
 package com.example.picksix
 
 import androidx.compose.ui.graphics.Color
-import kotlinx.serialization.Serializable
 
 
 data class NFLTeams(

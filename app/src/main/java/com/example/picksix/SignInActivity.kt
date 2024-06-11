@@ -35,11 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.picksix.ui.theme.PickSixTheme
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
-import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -117,7 +114,6 @@ class SignInActivity : ComponentActivity() {
                                     signInWithEmail(email, password)
                                 }
                             }
-
                         }.onSuccess {
                             // 로그인 성공 시 수행할 작업
                             updateUserId()

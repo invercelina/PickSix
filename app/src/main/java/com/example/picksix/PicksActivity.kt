@@ -37,7 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,7 +52,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.picksix.ui.theme.PickSixTheme
-import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -76,7 +75,7 @@ class PicksActivity : ComponentActivity() {
         ) {
             item {
                 var isPickScreen by remember { mutableStateOf(true) }
-                var clickWeek by remember { mutableStateOf(1) }
+                var clickWeek by remember { mutableIntStateOf(thisWeekNumber) }
                 var emailData by remember { mutableStateOf("") }
                 var pointData by remember { mutableStateOf("") }
                 var leaderList by remember { mutableStateOf<List<Leader>>(listOf()) }
@@ -86,7 +85,7 @@ class PicksActivity : ComponentActivity() {
                     modifier = Modifier
                         .height(130.dp)
                         .fillMaxWidth()
-                        .background(Color.Blue),
+                        .background(Color.Black),
                     verticalArrangement = Arrangement.Center
                 ) {
                     Row(
@@ -241,6 +240,7 @@ class PicksActivity : ComponentActivity() {
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            Text(text = "Nickname")
                             leaderList.forEach {
                                 Text(text = "${it.nickname}")
                             }
@@ -249,6 +249,7 @@ class PicksActivity : ComponentActivity() {
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            Text(text = "Point")
                             leaderList.forEach {
                                 Text(text = "${it.point}")
                             }

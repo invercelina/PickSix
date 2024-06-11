@@ -46,34 +46,32 @@ data class Week1Prediction(
 
 
 fun predictionFunction() {
-    runCatching {
-        runBlocking {
-            launch {
-                val week1PredictSubmit = Week1Prediction(
-                    id = userId,
-                    game1_prediction = week1Prediction.getOrNull(0),
-                    game2_prediction = week1Prediction.getOrNull(1),
-                    game3_prediction = week1Prediction.getOrNull(2),
-                    game4_prediction = week1Prediction.getOrNull(3),
-                    game5_prediction = week1Prediction.getOrNull(4),
-                    game6_prediction = week1Prediction.getOrNull(5),
-                    game7_prediction = week1Prediction.getOrNull(6),
-                    game8_prediction = week1Prediction.getOrNull(7),
-                    game9_prediction = week1Prediction.getOrNull(8),
-                    game10_prediction = week1Prediction.getOrNull(9),
-                    game11_prediction = week1Prediction.getOrNull(10),
-                    game12_prediction = week1Prediction.getOrNull(11),
-                    game13_prediction = week1Prediction.getOrNull(12),
-                    game14_prediction = week1Prediction.getOrNull(13),
-                    game15_prediction = week1Prediction.getOrNull(14),
-                    game16_prediction = week1Prediction.getOrNull(15)
-                )
-                withContext(Dispatchers.IO) {
+    runBlocking {
+        launch {
+            val week1PredictSubmit = Week1Prediction(
+                id = userId,
+                game1_prediction = week1Prediction.getOrNull(0),
+                game2_prediction = week1Prediction.getOrNull(1),
+                game3_prediction = week1Prediction.getOrNull(2),
+                game4_prediction = week1Prediction.getOrNull(3),
+                game5_prediction = week1Prediction.getOrNull(4),
+                game6_prediction = week1Prediction.getOrNull(5),
+                game7_prediction = week1Prediction.getOrNull(6),
+                game8_prediction = week1Prediction.getOrNull(7),
+                game9_prediction = week1Prediction.getOrNull(8),
+                game10_prediction = week1Prediction.getOrNull(9),
+                game11_prediction = week1Prediction.getOrNull(10),
+                game12_prediction = week1Prediction.getOrNull(11),
+                game13_prediction = week1Prediction.getOrNull(12),
+                game14_prediction = week1Prediction.getOrNull(13),
+                game15_prediction = week1Prediction.getOrNull(14),
+                game16_prediction = week1Prediction.getOrNull(15)
+            )
+            withContext(Dispatchers.IO) {
 //                    Log.d("week1Prediction", week1Prediction.toString())
 //                    Log.d("week1PredictGetOrNull", week1Prediction.getOrNull(0).toString())
 //                    Log.d("week1PredictSubmit", week1PredictSubmit.toString())
-                    supabase.from("week01_predictions").insert(week1PredictSubmit)
-                }
+                supabase.from("week01_predictions").insert(week1PredictSubmit)
             }
         }
     }

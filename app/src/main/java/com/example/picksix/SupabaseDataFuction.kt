@@ -12,6 +12,7 @@ data class Leader(
     val point: Int,
 )
 
+
 suspend fun getEmail(onEmailReceived: (String) -> Unit) {
     withContext(Dispatchers.IO) {
         // 예시: Supabase에서 이메일 데이터를 가져오는 코드
@@ -79,4 +80,5 @@ suspend fun getLeaders(): List<Leader> {
         .decodeAs<List<Leader>>()
     return result.sortedByDescending { it.point }
 }
+
 
