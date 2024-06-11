@@ -107,7 +107,7 @@ class PicksActivity : ComponentActivity() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             // 이 버튼은 ProfileActivity로 가는 버튼입니다
-                            Box() {
+                            Box {
                                 Button(
                                     onClick = {
                                         val intent = Intent(context, ProfileActivity::class.java)
@@ -260,7 +260,7 @@ class PicksActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(text = "Nickname", fontSize = 20.sp, fontWeight = FontWeight.Black)
-                            Divider(modifier = Modifier.height(1.dp).fillMaxWidth())
+                            Divider(modifier = Modifier.height(1.dp).fillMaxWidth(),color = Color.Black)
                             leaderList.forEach {
                                 Text(text = "${it.nickname}")
                                 Divider(modifier = Modifier.height(1.dp).fillMaxWidth(),color = Color.LightGray)
