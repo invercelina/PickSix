@@ -259,18 +259,22 @@ class PicksActivity : ComponentActivity() {
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(text = "Nickname")
+                            Text(text = "Nickname", fontSize = 20.sp, fontWeight = FontWeight.Black)
+                            Divider(modifier = Modifier.height(1.dp).fillMaxWidth())
                             leaderList.forEach {
                                 Text(text = "${it.nickname}")
+                                Divider(modifier = Modifier.height(1.dp).fillMaxWidth(),color = Color.LightGray)
                             }
                         }
                         Column(
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(text = "Point")
+                            Text(text = "Point", fontSize = 20.sp, fontWeight = FontWeight.Black)
+                            Divider(modifier = Modifier.height(1.dp).fillMaxWidth())
                             leaderList.forEach {
                                 Text(text = "${it.point}")
+                                Divider(modifier = Modifier.height(1.dp).fillMaxWidth(), color = Color.LightGray)
                             }
                         }
                     }
