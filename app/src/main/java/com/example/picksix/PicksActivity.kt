@@ -85,7 +85,7 @@ class PicksActivity : ComponentActivity() {
                     modifier = Modifier
                         .height(130.dp)
                         .fillMaxWidth()
-                        .background(Color.Blue),
+                        .background(Color(0xFFFFF9C4)),
                     verticalArrangement = Arrangement.Center
                 ) {
                     Row(

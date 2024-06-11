@@ -20,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.picksix.ui.theme.AppTheme
 import com.example.picksix.ui.theme.PickSixTheme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -64,7 +66,7 @@ class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PickSixTheme {
+            AppTheme {
                 SignUpScreen()
             }
         }
@@ -73,7 +75,9 @@ class SignUpActivity : ComponentActivity() {
     @Composable
     fun SignUpScreen() {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFFFF9C4)) // Soft pastel yellow
         ) {
             val context = LocalContext.current as? Activity
             Image(
@@ -86,7 +90,8 @@ class SignUpActivity : ComponentActivity() {
                 text = "Sign up",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 20.dp)
+                modifier = Modifier.padding(start = 20.dp),
+                color = Color(0xFF333333) // Dark grey for readability
             )
             Spacer(modifier = Modifier.height(20.dp))
             Column(
@@ -95,8 +100,8 @@ class SignUpActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .height(410.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(Color.LightGray),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .background(Color(0xFFFFF3E0)), // Light peach color
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 var email by remember { mutableStateOf("") }
                 var password by remember { mutableStateOf("") }
@@ -109,6 +114,10 @@ class SignUpActivity : ComponentActivity() {
                     label = {
                         Text(text = "email")
                     },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White // Ensure TextField is white for contrast
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -118,13 +127,18 @@ class SignUpActivity : ComponentActivity() {
                         Text(text = "password")
                     },
                     visualTransformation = PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White // Ensure TextField is white for contrast
+                    )
                 )
                 Text(
                     text = "6자부터 ${maxChar}글자까지 가능합니다",
                     modifier = Modifier
                         .padding(horizontal = 35.dp)
                         .fillMaxWidth(),
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    color = Color(0xFF333333) // Dark grey for readability
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 TextField(
@@ -132,13 +146,18 @@ class SignUpActivity : ComponentActivity() {
                     label = {
                         Text(text = "nickname")
                     },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White // Ensure TextField is white for contrast
+                    )
                 )
                 Text(
                     text = "${maxChar}글자까지 가능합니다",
                     modifier = Modifier
                         .padding(horizontal = 35.dp)
                         .fillMaxWidth(),
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    color = Color(0xFF333333) // Dark grey for readability
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
@@ -179,9 +198,13 @@ class SignUpActivity : ComponentActivity() {
                         .padding(horizontal = 30.dp)
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFFA8EE5))
+                    colors = ButtonDefaults.buttonColors(Color(0xFFFF7043)) // Bright coral
                 ) {
-                    Text(text = "Sign up")
+                    Text(
+                        text = "Sign up",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }
@@ -190,7 +213,7 @@ class SignUpActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun SignUpPreview() {
-        PickSixTheme {
+        AppTheme {
             SignUpScreen()
         }
     }

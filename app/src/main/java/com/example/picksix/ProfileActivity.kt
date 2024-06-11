@@ -52,7 +52,7 @@ class ProfileActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Yellow),
+                .background(Color(0xFFFFF9C4)), // Soft pastel yellow
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             var preferTeam by remember { mutableStateOf<NFLTeams?>(null) }
@@ -64,8 +64,7 @@ class ProfileActivity : ComponentActivity() {
                 }
             }
 
-
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(72.dp))
             Image(
                 painter = painterResource(
                     id = if (preferTeam != null) {
@@ -75,43 +74,45 @@ class ProfileActivity : ComponentActivity() {
                 contentDescription = "logo",
                 modifier = Modifier
                     .size(200.dp)
-                    .border(2.dp, Color.Blue, RoundedCornerShape(15.dp))
+                    .border(2.dp, Color(0xFFFF7043), RoundedCornerShape(15.dp)) // Bright coral
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "이메일", modifier = Modifier
                     .width(300.dp)
-                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
+                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                color = Color(0xFF333333) // Dark grey for readability
             )
             Text(
                 text = intent.getStringExtra("emailData") ?: "null",
                 modifier = Modifier
                     .width(300.dp)
                     .padding(start = 100.dp),
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                color = Color(0xFF333333) // Dark grey for readability
             )
             Spacer(modifier = Modifier.height(20.dp))
-
 
             Text(
                 text = "Point", modifier = Modifier
                     .width(300.dp)
-                    .padding(16.dp),
-                fontSize = 20.sp, fontWeight = FontWeight.Bold
+                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                color = Color(0xFF333333) // Dark grey for readability
             )
-
             Text(
                 text = intent.getStringExtra("pointData") ?: "null",
                 modifier = Modifier
                     .width(300.dp)
                     .padding(start = 100.dp),
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                color = Color(0xFF333333) // Dark grey for readability
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "선호팀", modifier = Modifier
                     .width(300.dp)
-                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold
+                    .padding(16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold,
+                color = Color(0xFF333333) // Dark grey for readability
             )
             Box {
                 var expandedStatus by remember { mutableStateOf(false) }
@@ -120,7 +121,7 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier
                         .padding(horizontal = 50.dp)
                         .fillMaxWidth()
-                        .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
+                        .border(1.dp, Color(0xFF80CBC4), RoundedCornerShape(15.dp)) // Mint green
                 ) {
                     val teamName = preferTeam?.name ?: "선호팀"
                     Text(

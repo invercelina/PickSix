@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,11 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.picksix.ui.theme.AppTheme
 import com.example.picksix.ui.theme.PickSixTheme
 
 //Splash
@@ -33,7 +37,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PickSixTheme {
+            AppTheme {
                 MainScreen()
             }
         }
@@ -44,17 +48,18 @@ class MainActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFFFC0CB)),
+                .background(Color(0xFFFFF9C4)), // Soft pastel yellow
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             val context = LocalContext.current
-            Text(
-                text = "PickSix",
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold
+            Image(
+                painter = painterResource(id = R.drawable.picksixlogo),
+                contentDescription = "logo",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.height(200.dp)
             )
-            Spacer(modifier = Modifier.height(80.dp))
+
             Button(
                 onClick = {
                     val intent = Intent(context, SignInActivity::class.java)
@@ -64,11 +69,11 @@ class MainActivity : ComponentActivity() {
                     .padding(horizontal = 30.dp)
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFFD3BC8D))
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF7043)) // Bright coral for primary button
             ) {
                 Text(
                     text = "Sign in",
-                    color = Color.Black,
+                    color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -82,21 +87,22 @@ class MainActivity : ComponentActivity() {
                     .padding(horizontal = 30.dp)
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color.White)
+                colors = ButtonDefaults.buttonColors(Color(0xFF80CBC4)) // Fresh mint green for secondary button
             ) {
                 Text(
                     text = "Sign up",
-                    color = Color.LightGray,
+                    color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
             }
+            Spacer(modifier = Modifier.height(80.dp))
         }
     }
 
     @Preview(showBackground = true)
     @Composable
     fun MainPreview() {
-        PickSixTheme {
+        AppTheme {
             MainScreen()
         }
     }

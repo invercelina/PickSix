@@ -15,12 +15,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +36,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,7 +65,9 @@ class SignInActivity : ComponentActivity() {
     @Composable
     fun SignInScreen() {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFFFF9C4)) // Soft pastel yellow
         ) {
             Image(
                 painter = painterResource(id = R.drawable.picksixlogo),
@@ -77,7 +79,8 @@ class SignInActivity : ComponentActivity() {
                 text = "Sign in",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 20.dp)
+                modifier = Modifier.padding(start = 20.dp),
+                color = Color(0xFF333333) // Dark grey for readability
             )
             Spacer(modifier = Modifier.height(20.dp))
             Column(
@@ -86,7 +89,7 @@ class SignInActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .height(300.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(Color.LightGray),
+                    .background(Color(0xFFFFF3E0)), // Light peach color
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 var email by remember { mutableStateOf("") }
@@ -100,6 +103,10 @@ class SignInActivity : ComponentActivity() {
                     label = {
                         Text(text = "email")
                     },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White // Ensure TextField is white for contrast
+                    )
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 TextField(
@@ -108,6 +115,10 @@ class SignInActivity : ComponentActivity() {
                         Text(text = "password")
                     },
                     visualTransformation = PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White// Ensure TextField is white for contrast
+                    )
                 )
                 Spacer(modifier = Modifier.height(50.dp))
                 Button(
@@ -144,11 +155,11 @@ class SignInActivity : ComponentActivity() {
                         .padding(horizontal = 30.dp)
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color(0xFFD3BC8D))
+                    colors = ButtonDefaults.buttonColors(Color(0xFFFF7043)) // Bright coral
                 ) {
                     Text(
                         text = "Sign in",
-                        color = Color.Black,
+                        color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
                 }
