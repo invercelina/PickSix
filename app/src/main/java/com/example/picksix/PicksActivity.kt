@@ -2,6 +2,7 @@ package com.example.picksix
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -67,7 +68,6 @@ class PicksActivity : ComponentActivity() {
 
     @Composable
     fun PicksScreen() {
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -281,9 +281,11 @@ class PicksActivity : ComponentActivity() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(text = "Point", fontSize = 20.sp, fontWeight = FontWeight.Black)
-                            Divider(modifier = Modifier
-                                .height(1.dp)
-                                .fillMaxWidth())
+                            Divider(
+                                modifier = Modifier
+                                    .height(1.dp)
+                                    .fillMaxWidth()
+                            )
                             leaderList.forEach {
                                 Text(text = "${it.point}")
                                 Divider(
@@ -460,9 +462,15 @@ class PicksActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        val context = LocalContext.current
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"))
                         Text(
                             text = "Detail",
-                            modifier = Modifier.padding(top = 3.dp, start = 10.dp),
+                            modifier = Modifier
+                                .padding(top = 3.dp, start = 10.dp)
+                                .clickable {
+                                           context.startActivity(intent)
+                                },
                             fontSize = 12.sp,
                             color = Color.Blue
                         )
